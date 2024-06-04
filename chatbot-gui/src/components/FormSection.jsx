@@ -37,6 +37,12 @@ const FormSection = () => {
     console.log(input);
   };
 
+  const handleKeyDown = (event) => {
+    if(event.key === 'Enter'){
+      handleSubmit(event);
+    }
+  }
+
   const sendInputToPython = async () => {
     const options = {
       method: "POST",
@@ -50,10 +56,12 @@ const FormSection = () => {
       setLoading(true);
       const response = await fetch("http://127.0.0.1:3035/qa", options);
       const data = await response.json();
+      setInput("");
       setArrs([...arrs, data]);
     } catch (e) {
       console.log(e);
     } finally {
+      setInput("");
       setLoading(false);
     }
   };
@@ -80,6 +88,7 @@ const FormSection = () => {
           placeholder="Ask me anything..."
           value={input}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
         />
         <button className="btn" type="button" onClick={handleSubmit}>
           Generate Response

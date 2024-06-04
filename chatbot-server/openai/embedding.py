@@ -4,12 +4,12 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 from api import embeddings
 
-loader = DirectoryLoader("./", glob="**/*.md")
+loader = DirectoryLoader("./", glob="all-doc.md")
 documents = loader.load()
 print(f"documents:{len(documents)}")
 
 # splitter
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=50)
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=30)
 # split the document
 split_docs = text_splitter.split_documents(documents)
 
