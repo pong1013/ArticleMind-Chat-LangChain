@@ -6,7 +6,7 @@ In this project, we utilize the API provided by LangChain to leverage large lang
 
 The chatbot is presented as a web application, consisting of a frontend directory and a backend program directory.
 
-
+![plot](flowchart.png)
 ### Step 1: Azure OpenAI ChatGPT Configuration:
 
 1. First, navigate to the "chatbot-server" directory and install Python packages listed in "requirements.txt". **Python version 3.8 or higher is required**.
@@ -63,5 +63,5 @@ The two main functions are:
 Once the backend is running, enable the frontend GUI. Navigate to the "chatbot-gui" directory:
 
 ```bash
-yarn start
+pnpm start
 ```
