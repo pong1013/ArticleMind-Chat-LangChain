@@ -1,0 +1,17 @@
+chromadb
+langchain
+pip
+openai
+openapi-schema-pydantic
+flask
+# pydantic
+websockets
+uvicorn
+Jinja2
+unstructured
+tabulate
+Flask-Cors
+pdf2image
+tiktoken
+gunicorn
+six

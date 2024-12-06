@@ -16,7 +16,7 @@ const FormSection = () => {
         const options = {
           method: "GET",
         };
-        await fetch("http://127.0.0.1:3035/clean-chat-history", options);
+        await fetch("http://127.0.0.1:3035/qa/clean-chat-history", options);
       } catch (error) {
         console.log(error);
       }
@@ -54,7 +54,7 @@ const FormSection = () => {
     
     try {
       setLoading(true);
-      const response = await fetch("http://127.0.0.1:3035/qa", options);
+      const response = await fetch("http://127.0.0.1:3035/qa/ask", options);
       const data = await response.json();
       setInput("");
       setArrs([...arrs, data]);
