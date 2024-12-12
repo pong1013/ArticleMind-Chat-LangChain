@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import AnswerSection from "./AnswerSection";
+import AnswerSection from "../AnswerSection/AnswerSection";
 import Lottie from "react-lottie";
-import animationData from "../animations/98993-three-dots-loading.json";
+import animationData from "../../animations/loading.json";
 // import { Scrollbars } from "react-custom-scrollbars";
 
 const FormSection = () => {

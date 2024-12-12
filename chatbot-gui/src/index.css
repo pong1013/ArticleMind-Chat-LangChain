@@ -8,7 +8,7 @@
 
 body {
   font-family: "Poppins", sans-serif;
-  background: #f7f8fa;
+  background: #78808d;
   color: #01050e;
   max-width: 800px;
   margin: 0 auto;
@@ -47,7 +47,7 @@ body {
   font-size: 1rem;
   font-family: "Poppins", sans-serif;
   outline: none;
-  background-color: #dbe1e7fb;
+  background-color: #afbfcffb;
   color: #080808;
   transition: all 0.5s ease-in-out;
 }
@@ -82,7 +82,7 @@ button {
 }
 
 .btn {
-  background: #0f5ec9;
+  background: #0b428d;
   height: 50px;
   color: #dadadb;
   padding: 10px 0;
@@ -109,14 +109,14 @@ button {
   /* max-height: 500px; */
   margin: 5px;
   border-radius: 5px;
-  background-color: #b3cae3;
+  background-color: #7c99b7;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
 }
 
 .answer-container {
   overflow: clip;
   max-height: 3000px;
-  background-color: #b3cae3;
+  background-color: #7c99b7;
 }
 
 img {
@@ -126,7 +126,7 @@ img {
 }
 
 .question-section {
-  background-color: #3484f0;
+  background-color: #436b9f;
   margin: 20px 0;
   padding: 10px;
   display: flex;
@@ -134,7 +134,7 @@ img {
 
 .answer-section {
   margin: 20px 0;
-  background-color: #b3cae3;
+  background-color: #7c99b7;
   padding: 10px;
   display: flex;
 }
@@ -194,4 +194,53 @@ img {
 
 .reduction {
   height: 150px;
+}
+
+.logoutButton {
+  position: fixed;
+  top: 5px; /* 增加垂直间距 */
+  right: 10px; 
+  width: 60px;
+  padding: 5px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: white;
+  background-color: #78808d;
+  border: 1px solid #d6dee7; /* 边框 */  
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 100;
+  margin: 0;
+}
+
+.logoutButton:hover {
+  background-color: #a1a5ab;
+}
+
+.userEmailDisplay {
+  position: fixed;
+  top: 5px;
+  left: 10px;
+  color: white;
+  font-size: 0.8rem;
+  z-index: 100;
+  /*background-color: #555658;   */
+  border: 1px solid #d6dee7; /* 边框 */  
+  padding: 3px 8px;
+  border-radius: 3px;
+  display: flex; /* 使用 flexbox */
+  flex-direction: column; /* 子元素垂直排列 */
+  align-items: flex-start; /* 左对齐 */
+}
+
+.hiText {
+  font-style: italic;
+  margin: 0; /* 移除默认的 margin */
+}
+
+.emailText {
+  font-weight: bold;
+  color: #d6dee7;
+  margin: 2px 0 0 0; /* 仅添加顶部的 2px 间距 */
 }
