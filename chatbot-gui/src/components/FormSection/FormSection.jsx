@@ -4,10 +4,13 @@ import Lottie from "react-lottie";
 import animationData from "../../animations/loading.json";
 // import { Scrollbars } from "react-custom-scrollbars";
 
-const FormSection = () => {
+const FormSection = ({setRemainingQuestions}) => {
   const [input, setInput] = useState("");
   const [arrs, setArrs] = useState([]);
   const [loading, setLoading] = useState(false);
+  // User Question Restriction
+  const [errorMessage, setErrorMessage] = useState("");
+
 
 
   useEffect(() => {
@@ -49,17 +52,32 @@ const FormSection = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ question: input }),
+      body: JSON.stringify({ question: input, user_email:localStorage.getItem("userEmail") }),
     };
     
     try {
       setLoading(true);
+      setErrorMessage("");
       const response = await fetch("http://127.0.0.1:3035/qa/ask", options);
+
+      if (response.status === 403) {
+        // 如果提问次数已用尽，显示错误信息
+        const errorData = await response.json();
+        setErrorMessage(errorData.detail);
+        return;
+      }
+
       const data = await response.json();
       setInput("");
       setArrs([...arrs, data]);
+
+      // Update Remain Questions
+      if (data.remainingQuestions !== undefined) {
+        setRemainingQuestions(data.remainingQuestions);
+      }
     } catch (e) {
       console.log(e);
+      setErrorMessage("An error occurred while processing your request.");
     } finally {
       setInput("");
       setLoading(false);
@@ -77,6 +95,11 @@ const FormSection = () => {
 
   return (
     <div className="form-section">
+      <div className="info-bar">
+        {/* 显示错误信息 */}
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+      </div>
+
       <AnswerSection arrs={arrs} />
 
       {loading && <Lottie options={loadingOptions} height={50} width={100} />}

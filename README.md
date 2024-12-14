@@ -18,9 +18,11 @@ In `chatbot-server/` directory, create `docs` folder and `.env` file:
     Move the documentation that you want the chatbot to learn into the docs folder.
 - .env
     ```
-    OPENAI_API_KEY = '<YOUR KEY>'
+    OPENAI_API_KEY = '<YOUR_KEY>'
     OPENAI_MODEL=gpt-4
     EMBEDDING_MODEL=text-embedding-ada-002
+    MONGO_URI = '<YOUR_MONGO_URI>'
+    DATABASE_NAME = ChatBotDB
     ```
 
 
@@ -51,6 +53,7 @@ pnpm install
 pnpm start
 ```
 
+---
 
 ### How to use the api to config chatbot
 1. Merge Docs
@@ -63,3 +66,53 @@ pnpm start
     curl -X POST "http://localhost:3035/embedding/create-embeddings"
     ```
     Create embeddings to serve as the chatbot's knowledge base. 
+
+
+---
+
+### Architecture
+- Frontend
+    ```
+    .
+    └── chatbot-gui  /
+        ├── public/
+        │   └── ...
+        └── src/
+            ├── Apps/
+            │   ├── App.css
+            │   ├── App.js
+            │   └── App.test.js
+            ├── animations/
+            │   └── ...
+            ├── components/
+            │   ├── AnswerSection/
+            │   │   └── AnswerSection.jsx
+            │   ├── FormSection/
+            │   │   └── FormSection.jsx
+            │   └── styles/
+            │       └── scrollbar.css
+            ├── index.css
+            ├── index.js
+            ├── reportWebVitals.js
+            └── setupTests.js
+        ```
+- Backend
+    ```
+    .
+    └── chatbot-server/
+        ├── config/
+        │   └── setting.py
+        ├── controllers/
+        │   ├── document_controller.py
+        │   ├── embedding_controller.py
+        │   └── qa_controller.py
+        ├── models/
+        │   └── /* database struct*/
+        ├── routers/
+        │   └── routers.py
+        ├── services/
+        │   ├── qa_service.py
+        │   └── vector_store_service.py
+        ├── main.py
+        └── requirements.txt
+    ```
