@@ -249,3 +249,10 @@ img {
   color: #d6dee7;
   margin: 2px 0 0 0; 
 }
+
+.remainingQuestions {
+  margin-top: 5px;
+  color: #a8a699; /* 突出显示 */
+  font-size: 0.8rem;
+  font-weight: bold;
+}

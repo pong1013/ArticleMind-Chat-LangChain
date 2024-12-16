@@ -101,13 +101,14 @@ pnpm start
     .
     └── chatbot-server/
         ├── config/
-        │   └── setting.py
+        │   ├── mongo_db.py
+        │   └── open_ai.py
         ├── controllers/
         │   ├── document_controller.py
         │   ├── embedding_controller.py
         │   └── qa_controller.py
         ├── models/
-        │   └── /* database struct*/
+        │   └── qa_model.py
         ├── routers/
         │   └── routers.py
         ├── services/
