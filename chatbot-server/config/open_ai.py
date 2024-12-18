@@ -15,7 +15,7 @@ print(f"Using Embedding Model: {EMBEDDING_MODEL_NAME}")
 
 # Load OpenAI models
 chat_model = ChatOpenAI(
-    temperature=0,
+    temperature=0.2,
     openai_api_key=OPENAI_API_KEY,
     model_name=OPENAI_MODEL_NAME,
 )
