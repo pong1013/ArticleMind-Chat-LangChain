@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import AnswerSection from "../AnswerSection/AnswerSection";
 import Lottie from "react-lottie";
 import animationData from "../../animations/loading.json";
-// import { Scrollbars } from "react-custom-scrollbars";
+import TopicButtons from "../TopicButtons/TopicButtons";
+import topics from "../../data/topics";
 
 const FormSection = ({setRemainingQuestions}) => {
   const [input, setInput] = useState("");
@@ -28,7 +29,10 @@ const FormSection = ({setRemainingQuestions}) => {
     cleanChatHistory();
   }, []);
 
-  
+  const handleTopicClick = (question) => {
+    setInput(question); // 将按钮的问题填充到输入框
+  };
+
   const handleChange = (event) => {
     setInput(event.target.value);
     // console.log(input);
@@ -99,6 +103,7 @@ const FormSection = ({setRemainingQuestions}) => {
         {/* 显示错误信息 */}
         {errorMessage && <p className="error-message">{errorMessage}</p>}
       </div>
+      <TopicButtons topics={topics} onSelectTopic={handleTopicClick} />
 
       <AnswerSection arrs={arrs} />
 

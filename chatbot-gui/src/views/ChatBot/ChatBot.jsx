@@ -40,13 +40,13 @@ const ChatBot = () => {
     <div className={styles.chatbot}>
       {userEmail && (
         <div className="userEmailDisplay">
-          <p className="hiText">Welcome</p>
+          <p className="hiText">Welcome  {isAdmin && <l className="adminTag">Admin</l>}
+          </p>
           <span className="emailText">{userEmail}</span>
           {/* 显示剩余提问次数 */}
           <p className="remainingQuestions">
             Remaining Questions: {remainingQuestions !== null ? remainingQuestions : "Loading..."}
           </p>
-          {isAdmin && <p className="adminTag">Admin Access</p>}
         </div>
       )}
       <button className={`${styles.logoutButton} logoutButton`} onClick={handleLogout}>

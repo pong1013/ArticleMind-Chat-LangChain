@@ -56,7 +56,7 @@ def create_embeddings():
         documents = loader.load()
 
         # Split the documents into smaller chunks
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=100)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=512, chunk_overlap=128)
         split_docs = text_splitter.split_documents(documents)
 
         logger.info(f"Loaded {len(split_docs)} chunks of text.")

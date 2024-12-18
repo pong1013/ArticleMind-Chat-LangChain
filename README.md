@@ -74,7 +74,7 @@ pnpm start
 - Frontend
     ```
     .
-    └── chatbot-gui  /
+    └── chatbot-gui/
         ├── public/
         │   └── ...
         └── src/
@@ -83,19 +83,25 @@ pnpm start
             │   ├── App.js
             │   └── App.test.js
             ├── animations/
-            │   └── ...
+            │   └── loading.json
             ├── components/
             │   ├── AnswerSection/
             │   │   └── AnswerSection.jsx
             │   ├── FormSection/
             │   │   └── FormSection.jsx
+            │   ├── TopicButtons/
+            │   │   ├── TopicButtons.jsx
+            │   │   └── TopicButtons.module.css
             │   └── styles/
             │       └── scrollbar.css
+            ├── data/
+            │   └── topics.js
             ├── index.css
             ├── index.js
             ├── reportWebVitals.js
             └── setupTests.js
-        ```
+
+    ```
 - Backend
     ```
     .
