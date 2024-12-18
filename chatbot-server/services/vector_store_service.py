@@ -15,6 +15,7 @@ nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 
 VECTOR_STORE_PATH = "./vector_store"
+os.makedirs(VECTOR_STORE_PATH, exist_ok=True)
 
 logger = logging.getLogger(__name__)
 
@@ -55,14 +56,14 @@ def create_embeddings():
         documents = loader.load()
 
         # Split the documents into smaller chunks
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=30)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=100)
         split_docs = text_splitter.split_documents(documents)
 
         logger.info(f"Loaded {len(split_docs)} chunks of text.")
 
         # Create embeddings and persist to the vector store
         docsearch = Chroma.from_documents(split_docs, embeddings, persist_directory=VECTOR_STORE_PATH)
-        docsearch.persist()
+        # docsearch.persist()
 
         logger.info("Embeddings created and stored successfully.")
     except Exception as e:

@@ -26,7 +26,7 @@ yarn-error.log*
 # docs
 /chatbot-server/docs/
 /chatbot-server/all-doc.md
-/chatbot-server/vector_store/
+# /chatbot-server/vector_store/
 
 # Python cache files
 __pycache__/
