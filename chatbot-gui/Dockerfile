@@ -1,22 +1,13 @@
-# Fetching the latest node image on alpine linux
-FROM node:alpine AS development
+FROM node:18 AS build
 
-LABEL maintainer="Peng"
+WORKDIR /app
+COPY . .
 
-# Declaring env
-ENV NODE_ENV development
+RUN npm install -g pnpm && pnpm install && pnpm build
 
-# Setting up the work directory
-WORKDIR /chatbot-gui
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Installing dependencies
-COPY ./package.json /chatbot-gui
-COPY ./yarn.lock /chatbot-gui
-
-RUN yarn --frozen-lockfile --link-duplicates
-
-# Copying all the files in our project
-COPY . /chatbot-gui
-
-# Starting our application
-CMD ["yarn", "start"]
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

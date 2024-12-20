@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./chatbot-gui
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    environment:
+      - REACT_APP_BACKEND_URL=http://backend:3035 # 使用容器名称访问后端
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./chatbot-server
+      dockerfile: Dockerfile
+    ports:
+      - "3035:3035" # 后端服务
+    restart: unless-stopped
+    env_file:
+      - ./chatbot-server/.env

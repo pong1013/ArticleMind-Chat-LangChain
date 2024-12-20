@@ -99,7 +99,8 @@ pnpm start
             ├── index.css
             ├── index.js
             ├── reportWebVitals.js
-            └── setupTests.js
+            ├── setupTests.js
+            └── .env
 
     ```
 - Backend
@@ -121,5 +122,6 @@ pnpm start
         │   ├── qa_service.py
         │   └── vector_store_service.py
         ├── main.py
-        └── requirements.txt
+        ├── requirements.txt
+        └── .env
     ```

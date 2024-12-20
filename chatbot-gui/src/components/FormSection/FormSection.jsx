@@ -6,6 +6,9 @@ import TopicButtons from "../TopicButtons/TopicButtons";
 import topics from "../../data/topics";
 
 const FormSection = ({setRemainingQuestions}) => {
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL; 
+  console.log("Backend URL:", BACKEND_URL); // 用于调试，确保正确加载
+
   const [input, setInput] = useState("");
   const [arrs, setArrs] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -20,14 +23,14 @@ const FormSection = ({setRemainingQuestions}) => {
         const options = {
           method: "GET",
         };
-        await fetch("http://127.0.0.1:3035/qa/clean-chat-history", options);
+        await fetch(`${BACKEND_URL}/qa/clean-chat-history`, options);
       } catch (error) {
         console.log(error);
       }
     };
 
     cleanChatHistory();
-  }, []);
+  }, [BACKEND_URL]);
 
   const handleTopicClick = (question) => {
     setInput(question); // 将按钮的问题填充到输入框
@@ -62,7 +65,7 @@ const FormSection = ({setRemainingQuestions}) => {
     try {
       setLoading(true);
       setErrorMessage("");
-      const response = await fetch("http://127.0.0.1:3035/qa/ask", options);
+      const response = await fetch(`${BACKEND_URL}/qa/ask`, options);
 
       if (response.status === 403) {
         // 如果提问次数已用尽，显示错误信息
