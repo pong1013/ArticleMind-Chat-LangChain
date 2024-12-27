@@ -8,7 +8,7 @@ services:
     ports:
       - "3000:80"
     restart: unless-stopped
-    environment:
+    env_file:
       - REACT_APP_BACKEND_URL=http://backend:3035 # 使用容器名称访问后端
     depends_on:
       - backend

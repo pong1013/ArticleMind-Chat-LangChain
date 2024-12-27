@@ -4,9 +4,12 @@
 
 In this project, we utilize the API provided by LangChain to leverage large language models offered by companies like OpenAI and Google. With this setup, our chatbot can read documents provided by the user and answer professional questions from within them. One noteworthy aspect is that our bot can retain memory of previous questions, allowing users to seek answers more conveniently.
 
+### [👉🏻 Live Demo](http://articlemind.ddns.net/login)
+![plot](assets/home.png)
+
 The chatbot is presented as a web application, consisting of a frontend directory and a backend program directory.
 
-![plot](flowchart.png)
+![plot](assets/flowchart.png)
 ### Step 1: OpenAI ChatGPT Configuration:
 
 In `chatbot-server/` directory, create `docs` folder and `.env` file:

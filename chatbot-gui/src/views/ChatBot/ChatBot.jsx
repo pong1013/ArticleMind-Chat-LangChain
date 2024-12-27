@@ -4,6 +4,7 @@ import FormSection from "../../components/FormSection/FormSection";
 import styles from "./ChatBot.module.css";
 
 const ChatBot = () => {
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL; 
   const userEmail = localStorage.getItem("userEmail"); // 从 localStorage 获取用户邮箱
   const [remainingQuestions, setRemainingQuestions] = useState(null); // 初始为 null，表示未加载
   const [isAdmin, setIsAdmin] = useState(false); // 是否为管理员
@@ -18,7 +19,7 @@ const ChatBot = () => {
   useEffect(() => {
     const fetchRemainingQuestions = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:3035/qa/user-status?user_email=${userEmail}`);
+        const response = await fetch(`${BACKEND_URL}/qa/user-status?user_email=${userEmail}`);
         if (response.ok) {
           const data = await response.json();
           setRemainingQuestions(data.remainingQuestions);
@@ -34,7 +35,7 @@ const ChatBot = () => {
     if (userEmail) {
       fetchRemainingQuestions();
     }
-  }, [userEmail]);
+  }, [BACKEND_URL,userEmail]);
 
   return (
     <div className={styles.chatbot}>
