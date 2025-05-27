@@ -4,8 +4,13 @@
 
 In this project, we utilize the API provided by LangChain to leverage large language models offered by companies like OpenAI and Google. With this setup, our chatbot can read documents provided by the user and answer professional questions from within them. One noteworthy aspect is that our bot can retain memory of previous questions, allowing users to seek answers more conveniently.
 
+To knwo how to host the website for free, read this article [Step-by-Step Guide to Hosting a Full-Stack App for Free](https://medium.com/@pong861013/step-by-step-guide-to-hosting-a-full-stack-app-for-free-1-built-cloud-infrastructure-0fef87e3140a)
+
 ### [👉🏻 Live Demo](http://articlemind.ddns.net/login)
 ![plot](assets/home.png)
+
+
+
 
 The chatbot is presented as a web application, consisting of a frontend directory and a backend program directory.
 
