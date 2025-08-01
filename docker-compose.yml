@@ -8,10 +8,10 @@ services:
     ports:
       - "3000:80"
     restart: unless-stopped
-    env_file:
-      - REACT_APP_BACKEND_URL=http://backend:3035 # 使用容器名称访问后端
     depends_on:
       - backend
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro # 掛載 SSL 證書
 
   backend:
     build:
