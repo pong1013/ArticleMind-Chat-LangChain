@@ -6,8 +6,9 @@ import TopicButtons from "../TopicButtons/TopicButtons";
 import topics from "../../data/topics";
 
 const FormSection = ({setRemainingQuestions}) => {
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL; 
-  console.log("Backend URL:", BACKEND_URL); // 用于调试，确保正确加载
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '/qa'; 
+  const API_BASE = BACKEND_URL === 'https://articlemind.ddns.net' ? '/qa' : BACKEND_URL;
+  console.log("Backend URL:", API_BASE); // 用于调试，确保正确加载
 
   const [input, setInput] = useState("");
   const [arrs, setArrs] = useState([]);
@@ -23,14 +24,14 @@ const FormSection = ({setRemainingQuestions}) => {
         const options = {
           method: "GET",
         };
-        await fetch(`${BACKEND_URL}/qa/clean-chat-history`, options);
+        await fetch(`${API_BASE}/clean-chat-history`, options);
       } catch (error) {
         console.log(error);
       }
     };
 
     cleanChatHistory();
-  }, [BACKEND_URL]);
+  }, [API_BASE]);
 
   const handleTopicClick = (question) => {
     setInput(question); // 将按钮的问题填充到输入框
@@ -65,7 +66,10 @@ const FormSection = ({setRemainingQuestions}) => {
     try {
       setLoading(true);
       setErrorMessage("");
-      const response = await fetch(`${BACKEND_URL}/qa/ask`, options);
+      // 立即清空輸入框，讓用戶知道請求已發送
+      setInput("");
+      
+      const response = await fetch(`${API_BASE}/ask`, options);
 
       if (response.status === 403) {
         // 如果提问次数已用尽，显示错误信息
@@ -75,7 +79,6 @@ const FormSection = ({setRemainingQuestions}) => {
       }
 
       const data = await response.json();
-      setInput("");
       setArrs([...arrs, data]);
 
       // Update Remain Questions
@@ -86,7 +89,6 @@ const FormSection = ({setRemainingQuestions}) => {
       console.log(e);
       setErrorMessage("An error occurred while processing your request.");
     } finally {
-      setInput("");
       setLoading(false);
     }
   };
@@ -110,7 +112,14 @@ const FormSection = ({setRemainingQuestions}) => {
 
       <AnswerSection arrs={arrs} />
 
-      {loading && <Lottie options={loadingOptions} height={50} width={100} />}
+      {loading && (
+        <div className="loading-container">
+          <Lottie options={loadingOptions} height={50} width={100} />
+          <p style={{ marginLeft: '10px', color: '#667eea', fontWeight: '600' }}>
+            Generating response...
+          </p>
+        </div>
+      )}
       <div className="reduction" />
       <div className="ask-form">
         <textarea
