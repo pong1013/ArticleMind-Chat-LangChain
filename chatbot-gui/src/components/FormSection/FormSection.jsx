@@ -45,12 +45,22 @@ const FormSection = ({setRemainingQuestions}) => {
   }
 
   const sendInputToPython = async () => {
+    // 檢查是否已登入
+    const token = localStorage.getItem("token");
+    const userEmail = localStorage.getItem("userEmail");
+    
+    if (!token || !userEmail) {
+      // 未登入，跳轉到登入頁面
+      console.log("User not logged in, redirecting to login page");
+      window.location.href = "/login";
+      return;
+    }
+
     try {
       setLoading(true);
       setErrorMessage("");
       setInput("");
       
-      const userEmail = localStorage.getItem("userEmail");
       const data = await apiService.sendMessage(input, userEmail);
       
       setArrs([...arrs, data]);

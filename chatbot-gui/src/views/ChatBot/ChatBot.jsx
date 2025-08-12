@@ -11,14 +11,29 @@ const ChatBot = () => {
   const [remainingQuestions, setRemainingQuestions] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   console.log("ChatBot - userEmail:", userEmail);
   console.log("ChatBot - token exists:", !!localStorage.getItem("token"));
+
+  // 檢查登入狀態
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const email = localStorage.getItem("userEmail");
+    setIsLoggedIn(!!(token && email));
+  }, []);
 
   const handleLogout = () => {
     console.log("=== LOGOUT TRIGGERED ===");
     localStorage.removeItem("token");
     localStorage.removeItem("userEmail");
+    setIsLoggedIn(false);
+    setRemainingQuestions(null);
+    setIsAdmin(false);
+  };
+
+  const handleLogin = () => {
+    console.log("=== LOGIN BUTTON CLICKED ===");
     window.location.href = "/login";
   };
 
@@ -38,7 +53,6 @@ const ChatBot = () => {
         console.error("Error fetching remaining questions:", error);
         if (error.message.includes("Authentication failed")) {
           console.log("Authentication failed in API call, logging out");
-          // 如果認證失敗，重定向到登入頁面
           handleLogout();
         }
       } finally {
@@ -46,43 +60,47 @@ const ChatBot = () => {
       }
     };
 
-    if (userEmail) {
+    if (userEmail && isLoggedIn) {
       fetchRemainingQuestions();
     } else {
-      console.log("No userEmail found in useEffect");
+      setIsLoading(false);
     }
-  }, [userEmail]);
-
-  // 如果沒有用戶郵箱，重定向到登入頁面
-  if (!userEmail) {
-    console.log("❌ No userEmail in ChatBot, redirecting to login");
-    handleLogout();
-    return null;
-  }
+  }, [userEmail, isLoggedIn]);
 
   console.log("✅ ChatBot rendering successfully");
   return (
     <div className={styles.chatbot}>
-      {userEmail && (
+      {/* 只有登入後才顯示用戶信息 */}
+      {isLoggedIn && userEmail && (
         <div className="userEmailDisplay">
           <p className="hiText">Welcome  {isAdmin && <l className="adminTag">Admin</l>}
           </p>
           <span className="emailText">{userEmail}</span>
-          {/* 显示剩余提问次数 */}
           <p className="remainingQuestions">
             Remaining Questions: {isLoading ? "Loading..." : (remainingQuestions !== null ? remainingQuestions : "Unknown")}
           </p>
         </div>
       )}
-      <button className={`${styles.logoutButton} logoutButton`} onClick={handleLogout}>
-        Logout
-      </button>
+      
+      {/* 登入/登出按鈕 */}
+      {isLoggedIn ? (
+        <button className={`${styles.logoutButton} logoutButton`} onClick={handleLogout}>
+          Logout
+        </button>
+      ) : (
+        <button className={`${styles.loginButton} loginButton`} onClick={handleLogin}>
+          Login
+        </button>
+      )}
+      
       <div className={styles.header}>
         <div className={styles.headerContent}>
           <h1>Chien's ChatBot</h1>
         </div>
         <p>Hi I'm Chien's robot agency, feel free to ask me everything!</p>
       </div>
+      
+      {/* 總是顯示完整的聊天界面 */}
       <FormSection setRemainingQuestions={setRemainingQuestions} />
       <AnswerSection />
     </div>
