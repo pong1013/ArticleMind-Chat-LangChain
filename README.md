@@ -81,26 +81,6 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
-    
-    # Backend API routing
-    location /qa/ {
-        proxy_pass http://localhost:3035/qa/;
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-    
-    # OAuth callback routing
-    location /oauth2callback {
-        proxy_pass http://localhost:3035;
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
 }
 ```
 
@@ -113,14 +93,23 @@ server {
     root /usr/share/nginx/html;
     index index.html;
 
-    # SPA routing
     location / {
         try_files $uri /index.html;
         add_header Cache-Control "no-cache, no-store, must-revalidate";
     }
 
-    # API proxy to backend
-    location /qa/ {
+    location /oauth2callback {
+        proxy_pass http://backend:3035;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # API routes
+    location /chat/ {
         proxy_pass http://backend:3035;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
@@ -131,9 +120,20 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    # OAuth callback proxy
-    location /oauth2callback {
+    location /documents/ {
         proxy_pass http://backend:3035;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /ai/ {
+        proxy_pass http://backend:3035;
+        proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
         proxy_set_header Host $host;
