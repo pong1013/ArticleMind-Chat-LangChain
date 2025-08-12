@@ -2,41 +2,65 @@ import React, { useState, useEffect } from "react";
 import AnswerSection from "../../components/AnswerSection/AnswerSection";
 import FormSection from "../../components/FormSection/FormSection";
 import styles from "./ChatBot.module.css";
+import { apiService } from "../../services/api";
 
 const ChatBot = () => {
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '/qa'; 
-  const userEmail = localStorage.getItem("userEmail"); // 从 localStorage 获取用户邮箱
-  const [remainingQuestions, setRemainingQuestions] = useState(null); // 初始为 null，表示未加载
-  const [isAdmin, setIsAdmin] = useState(false); // 是否为管理员
+  console.log("=== CHATBOT COMPONENT RENDER ===");
+  
+  const userEmail = localStorage.getItem("userEmail");
+  const [remainingQuestions, setRemainingQuestions] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  console.log("ChatBot - userEmail:", userEmail);
+  console.log("ChatBot - token exists:", !!localStorage.getItem("token"));
 
   const handleLogout = () => {
+    console.log("=== LOGOUT TRIGGERED ===");
     localStorage.removeItem("token");
     localStorage.removeItem("userEmail");
     window.location.href = "/login";
   };
 
-  // 登录时主动获取剩余提问次数
   useEffect(() => {
+    console.log("=== CHATBOT USE EFFECT ===");
+    console.log("userEmail in useEffect:", userEmail);
+    
     const fetchRemainingQuestions = async () => {
       try {
-        const response = await fetch(`${BACKEND_URL}/user-status?user_email=${userEmail}`);
-        if (response.ok) {
-          const data = await response.json();
-          setRemainingQuestions(data.remainingQuestions);
-          setIsAdmin(data.isAdmin); // 如果返回了管理员状态，更新到状态
-        } else {
-          console.error("Failed to fetch user status");
-        }
+        console.log("Fetching user status...");
+        setIsLoading(true);
+        const data = await apiService.getUserStatus(userEmail);
+        console.log("User status data:", data);
+        setRemainingQuestions(data.remainingQuestions);
+        setIsAdmin(data.isAdmin);
       } catch (error) {
         console.error("Error fetching remaining questions:", error);
+        if (error.message.includes("Authentication failed")) {
+          console.log("Authentication failed in API call, logging out");
+          // 如果認證失敗，重定向到登入頁面
+          handleLogout();
+        }
+      } finally {
+        setIsLoading(false);
       }
     };
 
     if (userEmail) {
       fetchRemainingQuestions();
+    } else {
+      console.log("No userEmail found in useEffect");
     }
-  }, [BACKEND_URL,userEmail]);
+  }, [userEmail]);
 
+  // 如果沒有用戶郵箱，重定向到登入頁面
+  if (!userEmail) {
+    console.log("❌ No userEmail in ChatBot, redirecting to login");
+    handleLogout();
+    return null;
+  }
+
+  console.log("✅ ChatBot rendering successfully");
   return (
     <div className={styles.chatbot}>
       {userEmail && (
@@ -46,7 +70,7 @@ const ChatBot = () => {
           <span className="emailText">{userEmail}</span>
           {/* 显示剩余提问次数 */}
           <p className="remainingQuestions">
-            Remaining Questions: {remainingQuestions !== null ? remainingQuestions : "Loading..."}
+            Remaining Questions: {isLoading ? "Loading..." : (remainingQuestions !== null ? remainingQuestions : "Unknown")}
           </p>
         </div>
       )}

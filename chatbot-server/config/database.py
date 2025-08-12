@@ -1,6 +1,6 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
-from models.qa_model import UserQuestion  # 确保导入的是正确的模型类
+from models.user import UserQuestion  # 确保导入的是正确的模型类
 import os
 from dotenv import load_dotenv
 

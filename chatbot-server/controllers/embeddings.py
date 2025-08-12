@@ -1,9 +1,10 @@
 from fastapi import APIRouter, HTTPException
-from services.vector_store_service import create_embeddings
+from services.vector import create_embeddings
 
 router = APIRouter()
 
-@router.post("/create-embeddings")
+# POST /ai/embeddings - 創建嵌入向量
+@router.post("/embeddings")
 async def create_embedding():
     try:
         create_embeddings()

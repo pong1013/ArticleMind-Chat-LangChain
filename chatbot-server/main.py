@@ -1,7 +1,7 @@
 from fastapi import FastAPI
+from routers import api
+from config.database import init_db
 from fastapi.middleware.cors import CORSMiddleware
-from routers import routers
-from config.mongo_db import init_db
 import sys
 import os
 import asyncio
@@ -27,7 +27,7 @@ app.add_middleware(
 )
 
 # 引入路由
-app.include_router(routers.router)
+app.include_router(api.router)
 
 
 

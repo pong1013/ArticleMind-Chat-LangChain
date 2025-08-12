@@ -1,6 +1,6 @@
 from langchain.chains import ConversationalRetrievalChain
-from services.vector_store_service import load_vector_store
-from config.open_ai import chat_model
+from services.vector import load_vector_store
+from config.openai import chat_model
 import logging
 
 # 設置日誌

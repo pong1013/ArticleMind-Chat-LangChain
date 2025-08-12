@@ -22,3 +22,7 @@ websockets==11.0
 pymongo==4.9
 motor==3.6.0
 beanie==1.28.0
+fastapi==0.116.1
+python-jose[cryptography]==3.3.0
+google-auth==2.40.3
+requests==2.32.4

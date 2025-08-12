@@ -1,9 +1,10 @@
 from fastapi import APIRouter
-from services.vector_store_service import merge_docs
+from services.vector import merge_docs
 
 router = APIRouter()
 
-@router.post("/merge-docs")
+# POST /documents/merge - 合併文檔
+@router.post("/merge")
 async def merge_documents():
     try:
         merge_docs()

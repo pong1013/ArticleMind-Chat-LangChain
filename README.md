@@ -258,19 +258,19 @@ pnpm start
     .
     └── chatbot-server/
         ├── config/
-        │   ├── mongo_db.py
-        │   └── open_ai.py
+        │   ├── database.py
+        │   └── openai.py
         ├── controllers/
-        │   ├── document_controller.py
-        │   ├── embedding_controller.py
-        │   └── qa_controller.py
+        │   ├── docs.py
+        │   ├── dmbeddings.py
+        │   └── chat.py
         ├── models/
-        │   └── qa_model.py
+        │   └── user.py
         ├── routers/
-        │   └── routers.py
+        │   └── api.py
         ├── services/
-        │   ├── qa_service.py
-        │   └── vector_store_service.py
+        │   ├── chat.py
+        │   └── vector.py
         ├── main.py
         ├── requirements.txt
         └── .env

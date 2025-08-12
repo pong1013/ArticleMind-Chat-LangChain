@@ -1,8 +1,9 @@
-from fastapi import APIRouter, HTTPException
-from services.qa_service import get_answer
+from fastapi import APIRouter, HTTPException, Depends
+from services.chat import get_answer
 from pydantic import BaseModel
-from models.qa_model import UserQuestion
+from models.user import UserQuestion
 from datetime import datetime, timezone
+from middleware.auth import verify_google_token
 
 
 router = APIRouter()
@@ -14,9 +15,19 @@ class QuestionRequest(BaseModel):
     question: str
     user_email: str
 
-@router.post("/ask")
-async def answer_question(request: QuestionRequest):
+# POST /chat - 發送問題並獲取回答
+@router.post("/")
+async def create_chat_message(
+    request: QuestionRequest,
+    user_info: dict = Depends(verify_google_token)
+):
     try:
+        # 驗證請求中的 email 與 token 中的 email 是否一致
+        if request.user_email != user_info['email']:
+            raise HTTPException(
+                status_code=403,
+                detail="Email mismatch with authentication token"
+            )
         
         print(f"Received question from {request.user_email}: {request.question}")
 
@@ -59,15 +70,26 @@ async def answer_question(request: QuestionRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error occurred: {str(e)}")
 
-@router.get("/clean-chat-history")
-async def clean_chat_history():
+# DELETE /chat - 清除聊天歷史
+@router.delete("/")
+async def clear_chat_history(user_info: dict = Depends(verify_google_token)):
     chat_histories.clear()
-    return {"message": "Chat history cleaned"}
+    return {"message": "Chat history cleared"}
 
-
-@router.get("/user-status")
-async def get_user_status(user_email: str):
+# GET /chat/user/{user_email}/status - 獲取用戶狀態
+@router.get("/user/{user_email}/status")
+async def get_user_status(
+    user_email: str,
+    user_info: dict = Depends(verify_google_token)
+):
     try:
+        # 驗證請求中的 email 與 token 中的 email 是否一致
+        if user_email != user_info['email']:
+            raise HTTPException(
+                status_code=403,
+                detail="Email mismatch with authentication token"
+            )
+        
         # 祝動獲取user record
         user_record = await UserQuestion.get_or_create_user_record(user_email)
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")

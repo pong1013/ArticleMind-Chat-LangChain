@@ -4,42 +4,32 @@ import Lottie from "react-lottie";
 import animationData from "../../animations/loading.json";
 import TopicButtons from "../TopicButtons/TopicButtons";
 import topics from "../../data/topics";
+import { apiService } from "../../services/api";
 
 const FormSection = ({setRemainingQuestions}) => {
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '/qa'; 
-  const API_BASE = BACKEND_URL === 'https://articlemind.ddns.net' ? '/qa' : BACKEND_URL;
-  console.log("Backend URL:", API_BASE); // 用于调试，确保正确加载
-
   const [input, setInput] = useState("");
   const [arrs, setArrs] = useState([]);
   const [loading, setLoading] = useState(false);
-  // User Question Restriction
   const [errorMessage, setErrorMessage] = useState("");
-
-
 
   useEffect(() => {
     const cleanChatHistory = async () => {
       try {
-        const options = {
-          method: "GET",
-        };
-        await fetch(`${API_BASE}/clean-chat-history`, options);
+        await apiService.clearChatHistory();
       } catch (error) {
-        console.log(error);
+        console.log("Clear chat history error:", error);
       }
     };
 
     cleanChatHistory();
-  }, [API_BASE]);
+  }, []);
 
   const handleTopicClick = (question) => {
-    setInput(question); // 将按钮的问题填充到输入框
+    setInput(question);
   };
 
   const handleChange = (event) => {
     setInput(event.target.value);
-    // console.log(input);
   };
 
   const handleSubmit = (event) => {
@@ -55,39 +45,26 @@ const FormSection = ({setRemainingQuestions}) => {
   }
 
   const sendInputToPython = async () => {
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ question: input, user_email:localStorage.getItem("userEmail") }),
-    };
-    
     try {
       setLoading(true);
       setErrorMessage("");
-      // 立即清空輸入框，讓用戶知道請求已發送
       setInput("");
       
-      const response = await fetch(`${API_BASE}/ask`, options);
-
-      if (response.status === 403) {
-        // 如果提问次数已用尽，显示错误信息
-        const errorData = await response.json();
-        setErrorMessage(errorData.detail);
-        return;
-      }
-
-      const data = await response.json();
+      const userEmail = localStorage.getItem("userEmail");
+      const data = await apiService.sendMessage(input, userEmail);
+      
       setArrs([...arrs, data]);
 
-      // Update Remain Questions
       if (data.remainingQuestions !== undefined) {
         setRemainingQuestions(data.remainingQuestions);
       }
     } catch (e) {
       console.log(e);
-      setErrorMessage("An error occurred while processing your request.");
+      if (e.message.includes("Authentication failed")) {
+        setErrorMessage("登入已過期，請重新登入");
+      } else {
+        setErrorMessage("An error occurred while processing your request.");
+      }
     } finally {
       setLoading(false);
     }
